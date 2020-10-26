@@ -1,7 +1,12 @@
 # kubeclean
 Tool to remove empty namespaces on kubernetes
 
-## How to use
+# How to use
+
+## Requirements
+An existing kubeconfig file on `./kube/config`
+
+## Installing
 Inside the app directory, build:  
 `go build -o ./kubeclean`
 
