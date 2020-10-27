@@ -17,6 +17,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
+
+	"github.com/manifoldco/promptui"
 )
 
 func main() {
@@ -29,6 +31,9 @@ func main() {
 		"kube-node-lease",
 		"kube-public",
 	}
+
+	//namespaces to delete
+	var namespaceDelete []string
 
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
@@ -52,14 +57,15 @@ func main() {
 		log.Fatalln("failed to get namespaces:", err)
 	}
 
-	fmt.Printf("kubeclean - remove empty namespaces \n")
+	fmt.Printf("⚠️  kubeclean - remove empty namespaces ⚠️ \n\n")
+	fmt.Printf("🔍 Searching resources... \n\n")
 
 	// print namespaces
 	for _, namespace := range namespaces.Items {
 
 		result := checkEx(namespaceExceptions, namespace.GetName())
 		if !result {
-			fmt.Printf("Deployments in namespace %s\n", namespace.GetName())
+			//fmt.Printf("Deployments in namespace %s\n", namespace.GetName())
 
 			//list deployments
 			deployments, err := clientset.AppsV1().Deployments(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
@@ -78,23 +84,26 @@ func main() {
 
 			//check if exists one or more deployments or statefulset
 			if deployCount < 1 {
-				fmt.Println("Deploy not found, clear the namespace?")
-				prompt()
-				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
-				if err != nil {
-					log.Fatalln("failed to delete namespace: ", err)
-				} else {
-					log.Fatalln("Namespace deleted!: ")
-				}
+				namespaceDelete = append(namespaceDelete, namespace.GetName())
+				/*
+					                err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
+									if err != nil {
+										log.Fatalln("failed to delete namespace: ", err)
+									} else {
+										log.Fatalln("Namespace deleted!: ")
+					                }
+				*/
 			} else if statefulsetCount < 1 {
 				fmt.Println("Deploy not found, clear the namespace?")
-				prompt()
-				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
-				if err != nil {
-					log.Fatalln("failed to delete namespace: ", err)
-				} else {
-					log.Fatalln("Namespace deleted!: ")
-				}
+				namespaceDelete = append(namespaceDelete, namespace.GetName())
+				/*
+									err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
+									if err != nil {
+										log.Fatalln("failed to delete namespace: ", err)
+									} else {
+										log.Fatalln("Namespace deleted!: ")
+					                }
+				*/
 			} else {
 				//print deployments
 				for _, deployment := range deployments.Items {
@@ -102,11 +111,40 @@ func main() {
 				}
 			}
 
-			fmt.Printf(" ------------------ \n")
+			//fmt.Printf(" ------------------ \n")
 
 		} else {
-			fmt.Printf(" Protected namespace: %s \n", namespace.GetName())
+			fmt.Printf("❗ Found a protected namespace: %s ⏩ \n", namespace.GetName())
 		}
+	}
+	if len(namespaceDelete) > 0 {
+
+		result := yesNo(namespaceDelete)
+
+		if result != "all" {
+			err := clientset.CoreV1().Namespaces().Delete(context.TODO(), result, metav1.DeleteOptions{})
+			if err != nil {
+				log.Fatalln("failed to delete namespace: ", err)
+			} else {
+				fmt.Printf("🔥  Namespace %s deleted!", result)
+			}
+			fmt.Printf("\n✅ Done!\n")
+		} else if result == "all" {
+			for _, namespace := range namespaceDelete {
+				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace, metav1.DeleteOptions{})
+				if err != nil {
+					log.Fatalln("failed to delete namespace: ", err)
+				} else {
+					fmt.Printf("🔥  Namespace %s deleted!\n", namespace)
+				}
+			}
+			fmt.Printf("\n✅ Done!\n")
+		} else {
+			fmt.Printf("\n☑️  Cancelled!\n")
+		}
+
+	} else {
+		fmt.Printf("\nNothing to remove, congrats! 🎉\n")
 	}
 
 }
@@ -130,4 +168,19 @@ func prompt() {
 		panic(err)
 	}
 	fmt.Println()
+}
+
+func yesNo(namespaceDelete []string) string {
+
+	namespaceDelete = append(namespaceDelete, "all")
+
+	prompt := promptui.Select{
+		Label: "Remove the namespaces?",
+		Items: namespaceDelete,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		log.Fatalf("Prompt failed %v\n", err)
+	}
+	return result
 }
