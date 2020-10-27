@@ -27,5 +27,5 @@ TODO
  - [ ] check for secret (beyond default)
  - [ ] check for service account (beyond default)
  - [ ] use external file to namespace exceptions
- - [ ] create the help flag
+ - [x] create the help flag
  
