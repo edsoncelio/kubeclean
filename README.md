@@ -1,4 +1,4 @@
-# Kubernetes Empty Namespace Clean
+# Kubernetes namespace clean
 Tool to remove empty namespaces on kubernetes
 
 ![](https://img.shields.io/github/license/edsoncelio/kubeclean)
@@ -14,6 +14,10 @@ Inside the app directory, build:
 
 And run:   
 `./kubeclean`
+
+
+# Documentation
+TODO
 
 # TODO
  -  [ ] add documentation
