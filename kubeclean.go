@@ -21,6 +21,7 @@ import (
 
 func main() {
 	var kubeconfig *string
+
 	//protected namespaces
 	namespaceExceptions := [4]string{
 		"default",
@@ -34,6 +35,7 @@ func main() {
 	} else {
 		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
+
 	flag.Parse()
 
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
@@ -59,14 +61,33 @@ func main() {
 		if !result {
 			fmt.Printf("Deployments in namespace %s\n", namespace.GetName())
 
+			//list deployments
 			deployments, err := clientset.AppsV1().Deployments(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get deployments: ", err)
 			}
 
-			//check if exists one or more deployments
-			if len(deployments.Items) < 1 {
-				fmt.Println("Found a empty namespace")
+			//list statefulsets
+			statefulsets, err := clientset.AppsV1().StatefulSets(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
+			if err != nil {
+				log.Fatalln("failed to get statefulset: ", err)
+			}
+
+			deployCount := len(deployments.Items)
+			statefulsetCount := len(statefulsets.Items)
+
+			//check if exists one or more deployments or statefulset
+			if deployCount < 1 {
+				fmt.Println("Deploy not found, clear the namespace?")
+				prompt()
+				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
+				if err != nil {
+					log.Fatalln("failed to delete namespace: ", err)
+				} else {
+					log.Fatalln("Namespace deleted!: ")
+				}
+			} else if statefulsetCount < 1 {
+				fmt.Println("Deploy not found, clear the namespace?")
 				prompt()
 				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace.GetName(), metav1.DeleteOptions{})
 				if err != nil {
@@ -82,21 +103,7 @@ func main() {
 			}
 
 			fmt.Printf(" ------------------ \n")
-			/*
-				fmt.Printf("Pods in namespace %s\n", namespace.GetName())
 
-					//get pods
-					pods, err := clientset.CoreV1().Pods(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
-					if err != nil {
-						log.Fatalln("failed to get pods:", err)
-					}
-
-									// print pods
-									for i, pod := range pods.Items {
-										fmt.Printf("[%d] %s\n", i, pod.GetName())
-									}
-						            fmt.Printf(" ------------------ \n")
-			*/
 		} else {
 			fmt.Printf(" Protected namespace: %s \n", namespace.GetName())
 		}
