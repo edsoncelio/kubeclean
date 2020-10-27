@@ -5,12 +5,10 @@ Tool to clean empty namespaces on kubernetes!
 package main
 
 import (
-	"bufio"
 	"context"
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -24,16 +22,27 @@ import (
 func main() {
 	var kubeconfig *string
 
-	//protected namespaces
-	namespaceExceptions := [4]string{
-		"default",
-		"kube-system",
-		"kube-node-lease",
-		"kube-public",
-	}
-
 	//namespaces to delete
 	var namespaceDelete []string
+
+	//protected namespaces
+	var namespaceExceptions []string
+
+	namespaceExceptions = append(namespaceExceptions, "default")
+	namespaceExceptions = append(namespaceExceptions, "kube-system")
+	namespaceExceptions = append(namespaceExceptions, "kube-node-lease")
+	namespaceExceptions = append(namespaceExceptions, "kube-public")
+
+	//delete policies
+	//var deletePolicies []string
+
+	/*
+		deletePolicies := [2]string{
+			"Deployment",
+			"Service",
+		}
+
+	*/
 
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
@@ -149,25 +158,13 @@ func main() {
 
 }
 
-func checkEx(arr [4]string, str string) bool {
+func checkEx(arr []string, str string) bool {
 	for _, a := range arr {
 		if a == str {
 			return true
 		}
 	}
 	return false
-}
-
-func prompt() {
-	fmt.Printf("-> Press Return key to continue.")
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		break
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
-	fmt.Println()
 }
 
 func yesNo(namespaceDelete []string) string {
