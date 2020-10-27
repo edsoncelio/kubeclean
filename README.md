@@ -20,6 +20,9 @@ And run (getting kubeconfig from default path):
 or, passing the absolute path to kubeconfig file:   
 `./kubeclean --kubeconfig /my/kubeconfig/file`
 
+To get help:   
+`./kubeclean --help`
+
 
 # Documentation
 TODO
