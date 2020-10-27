@@ -14,11 +14,11 @@ Tool to remove empty namespaces on kubernetes
 Inside the app directory, build:  
 `go build -o ./kubeclean`
 
-And run:   
+And run (getting kubeconfig from default path):   
 `./kubeclean`
 
 or, passing the absolute path to kubeconfig file:   
-`./kubeclean --kubeconfig /my/kubeconfig/file
+`./kubeclean --kubeconfig /my/kubeconfig/file`
 
 
 # Documentation
