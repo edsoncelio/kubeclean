@@ -1,4 +1,4 @@
-# Kubernetes namespace clean
+# K8s namespace clean
 Tool to remove empty namespaces on kubernetes
 
 :warning: Do not run with a kubeconfig with role cluster-admin or set the protected namespaces!
