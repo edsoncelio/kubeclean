@@ -8,7 +8,7 @@ Tool to remove empty namespaces on kubernetes
 # Usage
 
 ## Requirements
-An existing kubeconfig file on `./kube/config`
+* Go +1.15.2
 
 ## Installation
 Inside the app directory, build:  
@@ -16,6 +16,9 @@ Inside the app directory, build:
 
 And run:   
 `./kubeclean`
+
+or, passing the absolute path to kubeconfig file:   
+./kubeclean --kubeconfig /my/kubeconfig/file
 
 
 # Documentation
