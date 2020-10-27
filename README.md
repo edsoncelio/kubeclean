@@ -18,7 +18,7 @@ And run:
 `./kubeclean`
 
 or, passing the absolute path to kubeconfig file:   
-./kubeclean --kubeconfig /my/kubeconfig/file
+`./kubeclean --kubeconfig /my/kubeconfig/file
 
 
 # Documentation
