@@ -1,10 +1,10 @@
 # K8s namespace clean
 Tool to remove empty namespaces on kubernetes
 
-:warning: Do not run with a kubeconfig with role cluster-admin or set the protected namespaces!
+:warning: Do not run with a kubeconfig with role cluster-admin!
 
-![GitHub](https://img.shields.io/github/license/edsoncelio/kubeclean)
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
+![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
 
 # Usage
 
@@ -31,7 +31,7 @@ To get help:
 TODO
 
 # TODO
- -  [ ] add documentation
+ - [ ] add documentation
  - [x] check for deployment
  - [x] check for service
  - [x] check for statefulset
@@ -39,4 +39,5 @@ TODO
  - [ ] check for service account (beyond default)
  - [ ] use external file to namespace exceptions (system namespaces)
  - [x] create the help flag
+ - [ ] Configure CI (with github actions)
  
