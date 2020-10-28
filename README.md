@@ -6,6 +6,9 @@ Tool to remove empty namespaces on kubernetes
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
 ![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
 
+# Overview
+![](example.png)
+
 # Usage
 
 ## Requirements
