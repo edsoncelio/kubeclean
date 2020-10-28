@@ -10,6 +10,8 @@ Tool to remove empty namespaces on kubernetes
 
 ## Requirements
 * Go +1.15.2
+* kubectl installed
+* valid kubeconfig
 
 ## Installation
 Inside the app directory, build:  
