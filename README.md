@@ -30,10 +30,10 @@ TODO
 # TODO
  -  [ ] add documentation
  - [x] check for deployment
- - [ ] check for service
+ - [x] check for service
  - [x] check for statefulset
  - [ ] check for secret (beyond default)
  - [ ] check for service account (beyond default)
- - [ ] use external file to namespace exceptions
+ - [ ] use external file to namespace exceptions (system namespaces)
  - [x] create the help flag
  
