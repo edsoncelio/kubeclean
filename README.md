@@ -2,7 +2,9 @@
 Tool to remove empty namespaces on kubernetes
 
 :warning: Do not run with a kubeconfig with role cluster-admin or set the protected namespaces!
+
 ![GitHub](https://img.shields.io/github/license/edsoncelio/kubeclean)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
 
 # Usage
 
