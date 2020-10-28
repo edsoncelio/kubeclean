@@ -30,7 +30,6 @@ func main() {
 
 	namespaceExceptions = append(namespaceExceptions, "default")
 	namespaceExceptions = append(namespaceExceptions, "kube-system")
-	namespaceExceptions = append(namespaceExceptions, "kube-node-lease")
 	namespaceExceptions = append(namespaceExceptions, "kube-public")
 
 	//delete policies
