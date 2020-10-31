@@ -17,7 +17,10 @@ Tool to remove empty namespaces on kubernetes
 * valid kubeconfig
 
 ## Installation
-Inside the app directory, build:  
+Inside the app directory, install dependencies:
+`go get `
+
+build:   
 `go build -o ./kubeclean`
 
 And run (getting kubeconfig from default path):   
