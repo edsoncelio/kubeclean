@@ -18,10 +18,10 @@ Tool to remove empty namespaces on kubernetes
 
 ## Installation 
 
-## using go get   
+### using go get   
 `$ go get github.com/edsoncelio/kubeclean`
 
-## from source
+### from source
 TODO
 
 ## Usage   
@@ -32,6 +32,7 @@ TODO
 
 # TODO
  - [ ] add documentation
+ - [ ] add tests
  - [x] check for deployment
  - [x] check for service
  - [x] check for statefulset
@@ -39,5 +40,6 @@ TODO
  - [ ] check for service account (beyond default)
  - [ ] use external file to namespace exceptions (system namespaces)
  - [x] create the help flag
- - [ ] Configure CI (with github actions)
+ - [x] configure CI (with github actions)
+ - [x] configure release
  
