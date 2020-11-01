@@ -1,4 +1,5 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/edsoncelio/kubeclean)
 ![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
 ![Github workflow](https://github.com/edsoncelio/kubeclean/workflows/Go/badge.svg)
 
