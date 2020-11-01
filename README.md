@@ -6,32 +6,26 @@ Tool to remove empty namespaces on kubernetes
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
 ![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
 ![Github workflow](https://github.com/edsoncelio/kubeclean/workflows/Go/badge.svg)
-# Overview
+
+## Overview
 ![](example.png)
 
-# Usage
 
 ## Requirements
 * Go +1.15.2
 * kubectl installed
 * valid kubeconfig
 
-## Installation   
-Inside the app directory, install dependencies:   
-`go get `
+## Installation 
 
-build:   
-`go build -o ./kubeclean`
+## using go get   
+`$ go get github.com/edsoncelio/kubeclean`
 
-And run (getting kubeconfig from default path):   
-`./kubeclean`
+## from source
+TODO
 
-or, passing the absolute path to kubeconfig file:   
-`./kubeclean --kubeconfig /my/kubeconfig/file`
-
-To get help:   
-`./kubeclean --help`
-
+## Usage   
+`$ kubeclean`
 
 # Documentation
 TODO
