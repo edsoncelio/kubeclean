@@ -2,6 +2,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/edsoncelio/kubeclean)
 ![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
 ![Github workflow](https://github.com/edsoncelio/kubeclean/workflows/Go/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/edsoncelio/kubeclean)](https://goreportcard.com/report/github.com/edsoncelio/kubeclean)
 
 # kubeclean
 Tool to remove empty namespaces on kubernetes
