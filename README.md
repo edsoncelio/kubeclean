@@ -17,6 +17,9 @@ Tool to remove empty namespaces on kubernetes
 
 ## Installation 
 
+### from release
+Download the package from the [release page](https://github.com/edsoncelio/kubeclean/releases) and execute
+
 ### using go get   
 `$ go get github.com/edsoncelio/kubeclean`
 
