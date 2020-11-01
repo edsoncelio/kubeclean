@@ -1,43 +1,37 @@
-# K8s namespace clean
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/edsoncelio/kubeclean)
+![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
+![Github workflow](https://github.com/edsoncelio/kubeclean/workflows/Go/badge.svg)
+
+# kubeclean
 Tool to remove empty namespaces on kubernetes
 
 :warning: Do not run with a kubeconfig with role cluster-admin!
 
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edsoncelio/kubeclean)
-![GitHub last commit](https://img.shields.io/github/last-commit/edsoncelio/kubeclean)
-![Github workflow](https://github.com/edsoncelio/kubeclean/workflows/Go/badge.svg)
-# Overview
 ![](example.png)
-
-# Usage
 
 ## Requirements
 * Go +1.15.2
 * kubectl installed
 * valid kubeconfig
 
-## Installation   
-Inside the app directory, install dependencies:   
-`go get `
+## Installation 
 
-build:   
-`go build -o ./kubeclean`
+### from release
+Download the package from the [release page](https://github.com/edsoncelio/kubeclean/releases) and execute
 
-And run (getting kubeconfig from default path):   
-`./kubeclean`
+### using go get   
+`$ go get github.com/edsoncelio/kubeclean`
 
-or, passing the absolute path to kubeconfig file:   
-`./kubeclean --kubeconfig /my/kubeconfig/file`
-
-To get help:   
-`./kubeclean --help`
-
-
-# Documentation
+### from source
 TODO
 
-# TODO
+## Usage   
+`$ kubeclean`
+
+## TODO
  - [ ] add documentation
+ - [ ] add tests
  - [x] check for deployment
  - [x] check for service
  - [x] check for statefulset
@@ -45,5 +39,6 @@ TODO
  - [ ] check for service account (beyond default)
  - [ ] use external file to namespace exceptions (system namespaces)
  - [x] create the help flag
- - [ ] Configure CI (with github actions)
+ - [x] configure CI (with github actions)
+ - [x] configure release
  
