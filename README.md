@@ -26,9 +26,6 @@ TODO
 ## Usage   
 `$ kubeclean`
 
-## Documentation
-TODO
-
 ## TODO
  - [ ] add documentation
  - [ ] add tests
