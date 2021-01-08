@@ -7,6 +7,8 @@
 # kubeclean
 Tool to remove empty namespaces on kubernetes
 
+>Disclaimer: Work in progress, just to practice go :p
+
 :warning: Do not run with a kubeconfig with role cluster-admin!
 
 ![](example.png)
