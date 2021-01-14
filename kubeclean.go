@@ -19,6 +19,32 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+func checkNamespaceDelete(clientset *kubernetes.Clientset, namespaceDelete []string, result string) {
+	switch {
+	case result == "all":
+		for _, namespace := range namespaceDelete {
+			err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace, metav1.DeleteOptions{})
+			if err != nil {
+				log.Fatalln("failed to delete namespace: ", err)
+			} else {
+				fmt.Printf("🔥  Namespace %s deleted!\n", namespace)
+			}
+		}
+		fmt.Printf("\n✅ Done!\n")
+	case result == "exit":
+		fmt.Printf("\n☑️  Cancelled!\n")
+	case result != "all" && result != "exit":
+		err := clientset.CoreV1().Namespaces().Delete(context.TODO(), result, metav1.DeleteOptions{})
+		if err != nil {
+			log.Fatalln("failed to delete namespace: ", err)
+		} else {
+			fmt.Printf("🔥  Namespace %s deleted!", result)
+		}
+		fmt.Printf("\n✅ Done!\n")
+
+	}
+}
+
 func main() {
 	var kubeconfig *string
 
@@ -26,26 +52,7 @@ func main() {
 	var namespaceDelete []string
 
 	//protected namespaces
-	var namespaceExceptions []string
-
-	namespaceExceptions = append(namespaceExceptions, "default")
-	namespaceExceptions = append(namespaceExceptions, "kube-system")
-	namespaceExceptions = append(namespaceExceptions, "kube-public")
-
-	//delete policies
-	//var deletePolicies []string
-
-	/*
-				deletePolicies := [6]string{
-					"deployment",
-		            "service",
-		            "configmap",
-		            "serviceaccount",
-		            "statefulset",
-		            "secret",
-				}
-
-	*/
+	namespaceExceptions := []string{"default", "kube-system", "kube-public"}
 
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
@@ -72,37 +79,36 @@ func main() {
 	fmt.Printf("⚠️  kubeclean - remove empty namespaces ⚠️ \n\n")
 	fmt.Printf("🔍 Searching resources... \n\n")
 
-	// print namespaces
 	for _, namespace := range namespaces.Items {
 
 		result := checkEx(namespaceExceptions, namespace.GetName())
 		if !result {
 
-			//list deployments
+			//deployments
 			deployments, err := clientset.AppsV1().Deployments(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get deployments: ", err)
 			}
 
-			//list statefulsets
+			//statefulsets
 			statefulsets, err := clientset.AppsV1().StatefulSets(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get statefulset: ", err)
 			}
 
-			//list services
+			//services
 			services, err := clientset.CoreV1().Services(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get service: ", err)
 			}
 
-			//list serviceaccounts
+			//serviceaccounts
 			serviceaccounts, err := clientset.CoreV1().ServiceAccounts(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get serviceaccount: ", err)
 			}
 
-			//list secrets
+			//secrets
 			secrets, err := clientset.CoreV1().Secrets(namespace.GetName()).List(context.TODO(), metav1.ListOptions{})
 			if err != nil {
 				log.Fatalln("failed to get secrets: ", err)
@@ -114,7 +120,6 @@ func main() {
 			serviceaccountCount := len(serviceaccounts.Items)
 			secretCount := len(secrets.Items)
 
-			//check if exists one or more deployments or statefulset
 			switch {
 			case deployCount < 1:
 				namespaceDelete = append(namespaceDelete, namespace.GetName())
@@ -123,7 +128,6 @@ func main() {
 			case statefulsetCount < 1 && serviceaccountCount == 1 && secretCount == 1 && deployCount < 1:
 				namespaceDelete = append(namespaceDelete, namespace.GetName())
 			default:
-				//print deployments
 				for _, deployment := range deployments.Items {
 					fmt.Printf("\n🤖 Found namespace '%s' with deployments: %s \n", namespace.GetName(), deployment.GetName())
 				}
@@ -136,29 +140,7 @@ func main() {
 	if len(namespaceDelete) > 0 {
 
 		result := yesNo(namespaceDelete)
-
-		switch {
-		case result == "all":
-			for _, namespace := range namespaceDelete {
-				err := clientset.CoreV1().Namespaces().Delete(context.TODO(), namespace, metav1.DeleteOptions{})
-				if err != nil {
-					log.Fatalln("failed to delete namespace: ", err)
-				} else {
-					fmt.Printf("🔥  Namespace %s deleted!\n", namespace)
-				}
-			}
-			fmt.Printf("\n✅ Done!\n")
-		case result == "exit":
-			fmt.Printf("\n☑️  Cancelled!\n")
-		case result != "all" && result != "exit":
-			err := clientset.CoreV1().Namespaces().Delete(context.TODO(), result, metav1.DeleteOptions{})
-			if err != nil {
-				log.Fatalln("failed to delete namespace: ", err)
-			} else {
-				fmt.Printf("🔥  Namespace %s deleted!", result)
-			}
-			fmt.Printf("\n✅ Done!\n")
-		}
+		checkNamespaceDelete(clientset, namespaceDelete, result)
 
 	} else {
 		fmt.Printf("\nNothing to remove, congrats! 🎉\n")
