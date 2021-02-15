@@ -2,19 +2,16 @@
 Tool to clean empty namespaces on kubernetes!
 */
 
-package main
+package cmd
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
-	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/util/homedir"
 
 	"github.com/manifoldco/promptui"
 )
@@ -45,8 +42,7 @@ func checkNamespaceDelete(clientset *kubernetes.Clientset, namespaceDelete []str
 	}
 }
 
-func main() {
-	var kubeconfig *string
+func execNamespaceCheck(kubeconfig string) {
 
 	//namespaces to delete
 	var namespaceDelete []string
@@ -54,15 +50,15 @@ func main() {
 	//protected namespaces
 	namespaceExceptions := []string{"default", "kube-system", "kube-public"}
 
-	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	}
+	// if home := homedir.HomeDir(); home != "" {
+	// 	kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+	// } else {
+	// 	kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	// }
 
-	flag.Parse()
+	// flag.Parse()
 
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		panic(err)
 	}
